@@ -53,8 +53,8 @@
 		</div>
 		</form>
 		<div id="display" class="container col-sm-12">
-			<div class="panel panel-default newlyAdded">
-		<!--	<div class="panel-heading">	
+	<!--	<div class="panel panel-default newlyAdded">
+			<div class="panel-heading">	
 				<div class="row">	
 					<div class="col-sm-8">
 						<h2>Soccerball</h2>
@@ -65,8 +65,8 @@
 						<div class="col-sm-6"><span onclick="removeItem(this)" class="glyphicon glyphicon-remove-sign" ></span></div>
 					</div>
 				</div>
-				</div>-->
-			</div>
+				</div>
+			</div>-->
 		</div>
 	</div>
 </div>
@@ -103,34 +103,35 @@ $(document).ready(function(){
 					}	
 				}
 			});	
-		}		
+		}	
 	});
 });
 function showItems(id,i,d,p){
 	$("#display").append($(
-		"<div class='panel panel-default newlyAdded' id='" +id+"'><div class='panel-heading'><div class='row'><div class='col-sm-8'><h2>"
+		"<div class='panel panel-default newlyAdded'><div class='panel-heading'><div class='row'><div class='col-sm-8'><h2>"
 		+ i +"</h2><p>"
 		+ d +"</p></div><div class='col-sm-4' style='padding-top: 20px;'><div class='col-sm-6'><button type='button' class='btn btn-primary'> $ " 
-		+ p +"</button></div><div class='col-sm-6'><span onclick='removeItem(this)' class='glyphicon glyphicon-remove-sign'></span></div></div></div></div></div>"
+		+ p +"</button></div><div class='col-sm-6'><span id='" +id+ "'class='glyphicon glyphicon-remove-sign'></span></div></div></div></div></div>"
 	));
 }
-function removeItem(ele){
-	var parentEle=$(ele).parentsUntil(".newlyAdded").parent();
-	var id=parentEle.attr('id');
+$("#display").delegate(".glyphicon","click",function (){
+	//var parentEle=$(this).parentsUntil(".newlyAdded").parent();
+	var parentEle=$(this).parentsUntil("#display");
+	var id=$(this).attr('id');
 	console.log("id: "+id);
 	$.ajax({
 		type: "DELETE",
 		url: "/products/"+id,
 		dataType:"json", 
 		success: function(){
+			parentEle.remove();
 			alert("data removed from server");
 		},
 		error: function(){
 			alert("error removing data from server");
 		}
 	});
-	parentEle.remove();
-}
+});
 </script>
 </body>
 </html>
