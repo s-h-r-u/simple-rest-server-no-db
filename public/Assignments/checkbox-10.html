@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Display Checkbox Text</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			overflow: scroll;
+			margin: 20px 20px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			font-size: 100%;
+		}
+		button{
+			margin: 10px; 
+			padding: 5px;
+		}
+	</style>
+</head>
+<body onload="hideElements()">
+<div id="main_one" style="border: 1px solid black; width:50px; height: 50px;">
+</div>
+<div id="main_two" style="border: 1px solid black; width:50px; height: 50px; margin:5px;">
+</div>
+<div id="main_three" style="border: 1px solid black; width:50px; height: 50px;">
+</div>
+
+<div id="checkboxDiv" style="padding: 10px;">
+<input type="checkbox" id="check1"><label for="check1"> Checkbox 1</label><br/>
+<input type="checkbox" id="check2"><label for="check2"> Checkbox 2</label><br/>
+<input type="checkbox" id="check3"><label for="check3"> Checkbox 3</label><br/>
+<input type="checkbox" id="check4"><label for="check4"> Checkbox 4</label><br/>
+<input type="checkbox" id="check5"><label for="check5"> Checkbox 5</label><br/>
+<input type="checkbox" id="check6"><label for="check6"> Checkbox 6</label><br/>
+<input type="checkbox" id="check7"><label for="check7"> Checkbox 7</label><br/>
+<input type="checkbox" id="check8"><label for="check8"> Checkbox 8</label><br/>
+<input type="checkbox" id="check9"><label for="check9"> Checkbox 9</label><br/>
+<input type="checkbox" id="check10"><label for="check10"> Checkbox 10</label><br/>
+</div>
+
+<p id="demo"></p>
+
+<button id="chkAll">Select All</button>
+<button id="unchk">Uncheck All</button>
+<button id="vcheck">Validate</button>
+
+<div style="padding: 10px;">
+<h2>My Favourite Links:</h2>
+<p id="favLinks">
+	<a href="https://www.google.com/?gws_rd=ssl" target="_blank">Google.com</a><br/>
+	<a href="http://www.w3schools.com/" target="_blank">W3Schools.com</a><br/>
+	<a href="https://www.yahoo.com/" target="_blank">Yahoo.com</a><br/>
+	<a href="http://www.cnn.com/" target="_blank">CNN.com</a><br/>
+	<a href="https://www.amazon.com/" target="_blank">Amazon.com</a><br/>
+</p>
+http://<input type="text" id="textURL" style="margin: 10px; width: 300px;"><br/>
+<button id="chkURL">Check URL</button>
+<button id="add" disabled>Add LINK</button>
+</div>
+
+<script>
+	function hideElements(){
+		document.getElementById("main_one").style.visibility="hidden";
+		document.getElementById("main_two").style.visibility="hidden";
+		document.getElementById("main_three").style.visibility="hidden";
+	}
+	document.getElementById("chkAll").addEventListener("click",checkAll);
+	document.getElementById("unchk").addEventListener("click",unCheckAll);
+	document.getElementById("vcheck").addEventListener("click",validate);
+	document.getElementById("chkURL").addEventListener("click",checkURL);
+	document.getElementById("add").addEventListener("click",addLink);
+
+	function checkAll(){
+		var x = document.getElementById("checkboxDiv");
+		var y = x.getElementsByTagName("INPUT");
+		for(var i=0;i<y.length;i++){
+			y[i].checked=true;
+		}		
+	}
+	function unCheckAll(){
+		var x = document.getElementById("checkboxDiv");
+		var y = x.getElementsByTagName("INPUT");
+		for(var i=0;i<y.length;i++){
+			y[i].checked=false;
+		}	
+	}
+	function validate(){
+		var l=document.getElementsByTagName("label");
+		var x = document.getElementById("checkboxDiv");
+		var y = x.getElementsByTagName("INPUT");	
+		var i, display="";
+		for(i=0;i<y.length;i++){
+			if(y[i].checked==true){
+				display=display+l[i].innerHTML+"\n";
+			}
+		}	
+		alert("The checkbox selected are:\n"+display);
+	}K 
+	function checkURL(){
+		var l=document.getElementById("textURL").value;
+		l="http://"+l+"/";
+
+		var p=document.getElementById("favLinks");
+		var aList=p.getElementsByTagName("A");	
+		var match=0;
+		for(var i=0;i<aList.length;i++){
+			if(l==aList[i]){
+				match=1;
+				break;
+			}
+			else{
+				match=0;
+			}
+		}
+		if(match==0){
+			document.getElementById("add").disabled=false;
+		}
+		else{
+			document.getElementById("add").disabled=true;
+			alert("link is already in the list");
+		}
+	}
+	function addLink(){
+		var l=document.getElementById("textURL").value;
+		l="http://"+l;
+		var a=document.createElement("a");
+		a.setAttribute("href",l);
+		a.setAttribute("target","_blank");
+		a.innerHTML=l;
+		console.log(a.href);
+		var br=document.createElement("br");
+		a.appendChild(br);
+
+		document.getElementById("favLinks").appendChild(a);
+		document.getElementById("add").disabled=true;
+		l="";
+	}
+			
+	
+</script>
+
+</body>
+</html>

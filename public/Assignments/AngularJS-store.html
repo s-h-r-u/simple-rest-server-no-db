@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bootstrap Project</title>
+	<meta charset="utf-8">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#storeNav">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>		
+			</button>
+			<a class="navbar-brand" href="#store">Store</a>
+		</div>
+		<div class="collapse navbar-collapse" id="storeNav">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#home">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#catalog">Catalog</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid">
+	<div class="container list-group col-sm-3">
+		<a href="#CrasJustoOdio" class="list-group-item active">Cras justo odio</a>
+		<a href="#DapibusAcFacilisisIn" class="list-group-item">Dapibus ac facilisis in</a>
+		<a href="#MorbiLeoRisus" class="list-group-item">Morbi leo risus</a>
+		<a href="#PortaAcConsecteturAc" class="list-group-item">Porta ac consectetur ac</a>
+		<a href="#VestibulumAtEros" class="list-group-item">Vestibulum at eros</a>
+	</div>
+	<div class="container col-sm-9">
+		<form class="form-group" name="myForm">	
+		<div class="form-inline" style="padding-bottom: 20px;">
+			<b>Search</b>
+			<input type="text" name="search" placeholder="Search by item name" class="form-control">
+		</div>
+		<div class="form-inline">
+			<b>Add Item </b><input id="item" type="text" name="item" placeholder="Item Name" class="form-control">
+			<input id="desc" type="text" name="desc" placeholder="Description" class="form-control">
+			<input id="price" type="text" name="price" placeholder="Price" class="form-control">
+			<button id="submit" type="submit" class="btn btn-default">Add</button>
+		</div>
+		</form>
+		<div id="display" class="container col-sm-12">
+			<div class="panel panel-default newlyAdded">
+		<!--	<div class="panel-heading">	
+				<div class="row">	
+					<div class="col-sm-8">
+						<h2>Soccerball</h2>
+						<p>FIFA approved size and weight</p>
+					</div>
+					<div class="col-sm-4" style="padding-top: 20px;">
+						<div class="col-sm-6"><button onclick="removeItem()" type="button" class="btn btn-primary">$19.95</button></div>
+						<div class="col-sm-6"><span onclick="removeItem(this)" class="glyphicon glyphicon-remove-sign" ></span></div>
+					</div>
+				</div>
+				</div>-->
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+$("#submit").on("click",function(e){e.preventDefault();});
+$(document).ready(function(){
+	var counter;	
+	$("#submit").click(function(){	
+		if($("#item").val()=="" || $("#desc").val()=="" || $("#price").val()==""){
+			alert("Please enter data in all fields");
+			return false;
+		}
+		else{
+			$.ajax({
+				type: "POST",
+				url: "/products",
+				data: {
+					item:$("#item").val(),
+					desc:$("#desc").val(),
+					price:$("#price").val()
+				},
+				success: function(data){	
+					if(counter>0){
+						showItems(data['id'],data['item'],data['desc'],data['price']);
+					}
+					else{
+						console.log("ajax else");
+						$.getJSON("/products", function(data){
+							$.each(data,function(i,field){
+								showItems(field['id'],field['item'],field['desc'],field['price']);
+							});
+						});	
+						counter=1;
+					}	
+				}
+			});	
+		}		
+	});
+});
+function showItems(id,i,d,p){
+	$("#display").append($(
+		"<div class='panel panel-default newlyAdded' id='" +id+"'><div class='panel-heading'><div class='row'><div class='col-sm-8'><h2>"
+		+ i +"</h2><p>"
+		+ d +"</p></div><div class='col-sm-4' style='padding-top: 20px;'><div class='col-sm-6'><button type='button' class='btn btn-primary'> $ " 
+		+ p +"</button></div><div class='col-sm-6'><span onclick='removeItem(this)' class='glyphicon glyphicon-remove-sign'></span></div></div></div></div></div>"
+	));
+}
+function removeItem(ele){
+	var parentEle=$(ele).parentsUntil(".newlyAdded").parent();
+	var id=parentEle.attr('id');
+	console.log("id: "+id);
+	$.ajax({
+		type: "DELETE",
+		url: "/products/"+id,
+		dataType:"json", 
+		success: function(){
+			alert("data removed from server");
+		},
+		error: function(){
+			alert("error removing data from server");
+		}
+	});
+	parentEle.remove();
+}
+</script>
+</body>
+</html>

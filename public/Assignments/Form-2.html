@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			margin: 20px 20px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			font-size: 100%;
+		}
+		form{
+			width: 60%;
+			padding: 2%;
+			margin: 2% 15%;
+			border: 1px solid black;
+		}
+		div{
+			padding: 20px;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<form name="info">
+	<div>
+	First Name: <input type="text" name="fname" id="fname" value=""><br/><br/>
+	Last Name: <input type="text" name="lname" value=""><br/>
+	</div>
+	<input type="submit" id="submit" value="submit"/>
+	<div id="div2"></div>
+</form>
+<script>
+$("#submit").on("click",function(e){e.preventDefault();});
+
+$(document).ready(function(){
+	$("#submit").on("click",submitData);
+	var counter;	
+	function submitData(){	
+		if(document.forms["info"]["fname"].value=="" || document.forms["info"]["lname"].value==""){
+			alert("Please enter data in both fields");
+			return false;
+		}
+		else{
+			$.ajax({
+				type: "POST",
+				url: "/users",
+				data: {
+					fname:document.forms["info"]["fname"].value,
+					lname:document.forms["info"]["lname"].value
+				},
+				success: function(data){	
+					if(counter>0){
+						$("#div2").append("First Name: "+data['fname']+",  Last Name: "+data['lname']+",  ID: "+data['id']+"<br>");
+					}
+					else{
+						$.getJSON("/users", function(data){
+							$.each(data,function(i,field){
+								$("#div2").append("First Name: "+field['fname']+",  Last Name: "+field['lname']+",  ID: "+field["id"]+"<br>");	
+							});
+						});	
+						counter=1;
+					}	
+				}
+			});	
+		}		
+	}
+});
+</script>
+</body>
+</html>

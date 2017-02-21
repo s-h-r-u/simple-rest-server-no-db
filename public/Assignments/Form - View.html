@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test-Form-View</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			overflow: scroll;
+			margin: 20px 20px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			font-size: 100%;
+			overflow: hidden;
+		}
+		form{
+			width: 35%;
+			height: 290px;
+			display: inline-block;
+			position: relative;
+			padding: 2%;
+			margin: 2% 2%;
+			border: 1px solid black;
+		}
+		div{
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+<form name="info" id="info">
+	<div>
+	First Name: <input type="text" name="fname" id="fname" value=""><br/><br/>
+	Last Name: <input type="text" name="lname" id="lname" value=""><br/>
+	</div>
+
+	<div>
+	<input type="radio" name="gender" value="male"> Male<br/>
+	<input type="radio" name="gender" value="female">Female<br/>
+	</div>
+
+	<div>
+	<select name ="state" style="padding: 5px;">
+		<option value="select">Select the State</option>
+		<option value="nj">NJ</option>
+		<option value="ny">NY</option>
+		<option value="pa">PA</option>
+		<option value="oh">OH</option>
+		<option value="tx">TX</option>
+	</select>
+	</div>
+
+	<div><button id="save">Save</button></div>
+</form>
+
+<form id="viewForm" style="position: absolute; right:20px;">
+	<div id="view"></div>
+	<button id="edit" style="visibility: hidden;">Edit</button>
+</form>
+<script>
+	document.getElementById("save").addEventListener("click",validateForm);
+	document.getElementById("save").addEventListener("click",function(e){
+		e.preventDefault();
+	});
+
+	document.getElementById("edit").addEventListener("click",editForm);
+	document.getElementById("edit").addEventListener("click",function(e){
+		e.preventDefault();
+	});
+
+	function validateForm() {		
+		var formVal=document.getElementById("info");
+		var viewVal=[];
+		var v = document.getElementById("view");
+		var para, node;
+		if(validateName(formVal[0]) && validateName(formVal[1])){
+			formVal[0].style.backgroundColor="white";
+			formVal[1].style.backgroundColor="white";
+			addPTag(formVal[0].name,formVal[0].value);
+			addPTag(formVal[1].name,formVal[1].value);
+			if(formVal[2].checked==false && formVal[3].checked==false){
+				alert("please select at least one option for gender");
+			}
+			else if(formVal[2].checked==true){	
+				addPTag(formVal[2].name,formVal[2].value);
+			}	
+			else if(formVal[3].checked==true){
+				addPTag(formVal[3].name,formVal[3].value);
+			}
+			if(formVal[4]=="select"){
+				alert("Please select the State");
+			}
+			else{
+				addPTag(formVal[4].name,formVal[4].value);
+			}
+		}
+		function validateName(nameVar){
+			if(nameVar.value==""){	
+				nameVar.style.backgroundColor="red";
+				return false;
+			}
+			else {
+				for(i=0;i<nameVar.value.length;i++){
+					if(!isNaN(nameVar.value[i])){
+						nameVar.style.backgroundColor="red";
+						y=0;
+						return false;
+					}
+					else{
+						y=1;
+					}
+				}
+				if (y==1){
+					nameVar.style.backgroundColor="white";
+					return true;
+				}
+			}
+		}	
+		function addPTag(attr,val){
+			para = document.createElement("p");
+			para.setAttribute("name",attr);
+			node = document.createTextNode(val);
+			para.appendChild(node);
+			v.appendChild(para);
+		}
+			
+		document.getElementById("edit").style.visibility="visible"
+		document.getElementById("info").reset();
+	}
+	function editForm(){
+		var element = document.getElementById("view");
+		var para=element.getElementsByTagName("P");
+
+		document.forms["info"]["fname"].value=para["fname"].innerHTML;
+		document.forms["info"]["lname"].value=para["lname"].innerHTML;
+		document.forms["info"]["state"].value=para["state"].innerHTML;
+		if(para["gender"].innerHTML=="male"){
+			document.forms["info"]["gender"][0].checked=true;
+		}
+		else{
+			document.forms["info"]["gender"][1].checked=true;
+		}
+		element.innerHTML="";
+		document.getElementById("edit").style.visibility="hidden";
+	}
+</script>
+
+</body>
+</html>

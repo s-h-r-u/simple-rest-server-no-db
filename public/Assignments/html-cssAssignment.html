@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<title>andreas08: ignore the trends</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			overflow: scroll;
+			margin: 20px 113px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			word-break: keep-all;
+			font-size: 100%;
+		}
+		h1{
+			font-size: 2em;
+			color: #525152;
+			color:#FFFFFF; 
+			text-indent: 20px;
+			font-weight: normal;
+		}
+		h2{
+			font-size: 1.4em;
+			color: #525152;
+		}
+		h3{
+			font-size: 1.2em;
+			color: #525152;
+		}
+		h4{
+			color:#FFFFFF; 
+			text-indent: 40px; 
+			font-weight: normal;
+			font-size: 1.2em;
+		}
+		header{
+			position: sticky;
+			top:0;
+			left:0;
+			z-index: 1;
+			background-color: #4279A5;
+			border-bottom: 1px solid white;
+			color: white;
+			margin: 0;
+			padding: 0.5px;
+		}
+		
+		nav{
+			list-style-type: none;
+			/*overflow: hidden;		(this will make the container of navigation big enough to accomodate the link blocks) */
+			background-color: #528ABD;
+			border-top: 1px solid white;
+		}
+		nav li{
+			display: inline;
+		}
+		nav div::after{
+			display: block;
+			content: "";
+			clear: left;
+		}
+		nav li a{
+
+			text-decoration: none;
+			/*	float:left;			(this will overlap blcks of links over the navigation - 
+				display:block;		remember we didn't set fixed height for navigation so navigation will disapprear) */
+			/*display: inline-block;*/
+			float:left;
+			color: white;
+			text-align: center;
+			padding: 10px 10px;
+			border-right: 1px solid white;
+		}
+		nav li a:hover:not(.active){
+			background-color: #2b506e;
+		}
+		.active{
+			background-color: #84B2DE;
+		}	
+		.link{
+			color: #4279A5;
+			font-size: 120%;
+			text-decoration: none;
+			display: block;
+		}
+		
+		section{
+			color: #313031;
+			max-width: 78%
+			height:200px;
+			padding-bottom:10px;
+			padding-right: 2%;
+			flex-wrap: wrap;
+		}
+		aside{
+			width: 20%; 
+			height: 100%; 
+			float: right;
+			padding-left: 10px;
+		}
+		input{
+			margin: 0 10px;
+		}
+		.box{
+			background-color: #FFFBFF;
+			border: 1px solid #C6C3C6;
+		}
+		.rightbox{
+			margin: 10px 5px 0 0;
+			padding: 10px;
+		}
+		.leftbox{
+			width:100%;
+			position: relative; 
+			float: left;
+			padding: 20px;
+			margin: 0 10px 10px 0;
+		}
+		.flex-container{
+			padding-top: 10px;
+			padding-bottom: 20px;
+			max-width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			flex-direction: rtl;
+		}
+		.flex-columns{
+			width: 48%;
+			margin-right: 8%;
+			padding-right: 10px;
+		}
+		.menu{
+			font-weight: bold;
+			z-index: -1;
+
+		}
+		.menu::before {
+			counter-increment: menu;
+			content: "Menu option " counter(menu);
+		}
+		.submenu::before{
+			counter-increment: submenu;
+			content:"Submenu " counter(submenu);
+		}
+		button{	 
+			background-color: #D6D3CE; 
+			border-style: 1px solid #A5A2A5;
+			width: 30px;
+			height: 23px;
+			box-shadow: none;
+		}
+		footer{
+			background-color: #4279A5;
+			color: white;
+			padding: 0.5px;
+			font-size: 0.8em; 
+			text-align: center; 
+			position: relative;  
+			bottom: 0;
+			margin-top: 0;
+			line-height: 40%;
+			font-family: "Lucida Console",Monospace;
+		}
+		footer > span{
+			font-size: 1.2em;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+
+	<header>
+		<div style="line-height: 40%; padding: 20px 0;">
+		<h1>andreas08: ignore the trends</h1>
+		<h4>space reserved for your website slogan!</h4>
+		</div>
+		<nav>
+		<div>
+			<li><a class="active" href="#first page">FIRST PAGE</a></li>
+			<li><a href="#second">SECOND</a></li>
+			<li><a href="#third">THIRD</a></li>
+			<li><a href="#fourth">FOURTH</a></li>
+			<li><a href="#fifth">FIFTH</a></li>
+			<li><a href="#and the last one">AND THE LAST ONE</a></li>
+		</div>
+		</nav>
+	</header>
+	<div style="padding: 20px;">
+	<aside>
+		<div class="box rightbox"> 	
+		<b>Note: </b>This is a box. It can be used for special messages both in the sidebar and the content section. You could use it for special notes and announcements, but also as a frame for photos. This space can be used for a short website presentation!
+		</div>
+		<div style="counter-reset: menu; padding-top: 20px; position: relative;">
+
+			<h2 style="z-index: -1;">Nested Menu</h2>
+			<a class="menu link" style="text-indent: 10px;" href="#menu1"></a>
+			<a class="menu link" style="text-indent: 10px;" href="#menu2"></a>
+			<a class="submenu link" style="text-indent: 30px;" href="#sub1"> </a>
+			<a class="submenu link" style="text-indent: 30px;" href="#sub2"> </a>
+			<a class="menu link" style="text-indent: 10px;" href="#menu3"></a>
+			<a class="menu link" style="text-indent: 10px;" href="#menu4"></a>
+			
+			<h2>Favourite Links</h2>
+			<a class="link" style="text-indent: 10px;" href="#templates">Free Website templates</a>
+			<a class="link" style="text-indent: 10px;" href="#webdesign">Open Web Design</a>
+			<a class="link" style="text-indent: 10px;" href="#news">sNews CMS</a>
+			<a class="link" style="text-indent: 10px;" href="#oswd">OSWD.org</a>
+
+			<h2>Search This Site</h2> 
+			<input type="Search" name="search" placeholder=" "><button>Go</button>
+		</div>
+	</aside>
+	
+	<section>
+		<h2>Welcome To Andreas08!</h2>
+		<p>I get a lot of requests about new open source templates, and this one was created as a response to one of those requests. This template is based on the design of my own website, with only small changes (hopefully improvements!) from my own design. Among the changes, it is worth to note that this template does not use any images - and browse-based font resizing is fully supported. Other than that, there are no special features or extras, only valid and well-structured XHTML 1.1 and CSS2 code.</p>
+		<p>Current template version: 1.0(November 28, 2005).</p>
+	</section>
+
+	<article class="flex-container">
+		<div class="flex-columns">
+		<h2>Included Style Examples:</h2>
+		<div class="box leftbox">
+			<h3>Sub-header example</h3>
+			<p>This is regular text, which is aligned to the left by default. You can easily change the alignment using the classes .textcenter and .textright on each paragraph.</p>
+			<span style="font-size: 120%; color: red;">This is an important note!</span><br/>
+			<a class="link" href="#alink">This is a link.</a>
+			<strong style="color: #525152">This is strong text.</strong><br/>
+			<small>This is small text.</small>
+			<ul>
+				<li>Unordered list option 1</li>
+				<li>Unordered list option 2</li>
+			</ul>
+			<ol>
+				<li>Ordered list option 1</li>
+				<li>Ordered list option 2</li>
+			</ol>
+			<dt><b>Definition list dt</b></dt>
+			<dd>Definition list dd</dd>
+		</div>
+		</div>
+		<div class="flex-columns">
+			<h2>About The Designer</h2>
+			<p>My name is Andreas Viklund, and I am a 25-year old professional designer living in Jokkmokk, northern Sweden. If you are interested in more advanced templates or custom design services, don't hesitate to contact me for more information!</p>
+			<h2>Open Source Template</h2>
+			<p>This is an open source template, which means that you are free to use it in any way you want to without any obligations. If you decide to use this template, I kindly ask you to leave the "Design by Andreas Viklund" link in the footer. I am also interested in seeing how many templates are used, so feel free to send me an e-mail with a link to your page. Of you want more templates to choose from, check out the sites in the "Favourite links" menu to the right!</p>
+		</div>
+	</article>
+	<div style="text-align: center; font-weight: bold; position: relative; color: #313031;">Good luck with your new design!</div>	
+	</div>
+		<footer>
+			<p>&copy 2017-2018 <span style="font-weight: bold; font-size: 1.2em%">Shruti Patel</span> | Design By <span style="font-weight: bold; font-size: 1.2em%">Andres Viklund</span></p>
+			<p>Courtey <span style="font-weight: bold; font-size: 1.2em%">Open Web Design</span> Thanks to <span style="font-weight: bold; font-size: 1.2em%">Florida Vacation Homes</span></p>
+		</footer>	
+
+</body>
+</html>

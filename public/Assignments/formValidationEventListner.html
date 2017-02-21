@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Validation</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			overflow: scroll;
+			margin: 20px 20px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			font-size: 100%;
+		}
+		form{
+			width: 60%;
+			padding: 2%;
+			margin: 2% 15%;
+			border: 1px solid black;
+		}
+		div{
+			padding: 10px;
+		}
+	</style>
+</head>
+<body>
+<form name="info">
+	<div>
+	First Name: <input type="text" name="fname" id="fname" value=""><br/><br/>
+	Last Name: <input type="text" name="lname" value=""><br/>
+	</div>
+
+	<div>
+	<input type="radio" name="rButton" value="male"> Male<br/>
+	<input type="radio" name="rButton" value="female">Female<br/>
+	</div>
+
+	<div>
+	<select name ="state" style="padding: 5px;">
+		<option value="select">Select the State</option>
+		<option value="nj">NJ</option>
+		<option value="ny">NY</option>
+		<option value="pa">PA</option>
+		<option value="oh">OH</option>
+		<option value="tx">TX</option>
+	</select>
+	</div>
+
+	<div><input type="checkbox" name="check"> I ACCEPT</div>
+
+	<div><button id="submit">Submit</button></div>
+ 
+</form>
+
+<script>
+	document.getElementById("submit").addEventListener("click",validateForm);
+	document.getElementById("submit").addEventListener("click",function(e){
+		e.preventDefault();
+	});
+
+	function validateForm() {
+		
+		var fnameVar=document.forms["info"]["fname"];
+		var lnameVar=document.forms["info"]["lname"];
+		var x,y=0,i;
+		if(validateName(fnameVar) && validateName(lnameVar)){
+			fnameVar.style.backgroundColor="white";
+			lnameVar.style.backgroundColor="white";
+				
+			if(document.forms["info"]["rButton"][0].checked==false && document.forms["info"]["rButton"][1].checked==false){
+				alert("please select at least one option for gender");
+			}	
+			else if (document.forms["info"]["state"].value=="select"){
+				alert("Please select the State");
+			}
+			else if (document.forms["info"]["check"].checked==false){
+				alert("Please check the box");
+			}
+		}
+	}		
+	function validateName(nameVar){
+		if(nameVar.value==""){	
+			nameVar.style.backgroundColor="red";
+			return false;
+		}
+		else {
+			for(i=0;i<nameVar.value.length;i++){
+				if(!isNaN(nameVar.value[i])){
+					nameVar.style.backgroundColor="red";
+					y=0;
+					return false;
+				}
+				else{
+					y=1;
+				}
+			}
+			if (y==1){
+				nameVar.style.backgroundColor="white";
+				return true;
+			}
+		}
+	}		
+	
+</script>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fahren to Cels</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			overflow: scroll;
+			margin: 20px 20px;
+			border: 2px solid #A5A2A5;
+			padding: 1px;
+			font-size: 100%;
+			overflow: scroll;
+		}
+		#temp{
+			width: 50%;
+			padding: 2%;
+			margin: 2% 15%;
+			border: 1px solid black;
+		}
+		input{
+			padding:5px;
+			border-color: grey;
+		}
+		div{
+			margin:10px;
+		}
+		button{
+			margin: 10px;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body onload="welcome()">
+	<div>
+		<img src="temperature.png" style="width:300px;height:350px; float: right;">
+	</div>
+	<div id="temp">
+		Temperature in Fahrenheit: <input type="text" id="ftemp" value="" onkeyup="convertTemp()"><br/><br/><br/>
+		Temperature in Celsius: <input type="text" id="ctemp" value=""><br/>
+	</div>
+	<div style="width: 40%;">
+		<p style="padding: 10px;">A temperature is an objective comparative measurement of hot or cold. It is measured by a thermometer. Several scales and units exist for measuring temperature, the most common being Celsius (denoted °C; formerly called centigrade), Fahrenheit (denoted °F), and, especially in science, Kelvin (denoted K).</p>
+	</div>
+	<div style="width: 30%;">
+		<h2>Important Links</h2>
+		<p><a href="https://en.wikipedia.org/wiki/Temperature" target="_blank"> Temperature from Wikipedia</a></p>
+		<p><a href="http://www.accuweather.com/" target="_blank"> Check Weather</a></p>
+	</div>
+
+	<button id="hideElems">Hide Elements</button>
+	<button id="showElems">Show Elements</button>
+
+	<button id="hideList" style="float: left;" >Mouse over to see list</button>
+	<ul id="myList" style="border: 1px solid pink; width:100px; display: none; "><h2>My List</h2> 
+		<li>List Item 1</li>
+		<li>List Item 2</li>
+		<li>List Item 3</li>
+		<li>List Item 4</li>
+	</ul>
+
+		
+	
+<script>
+	document.getElementById("hideElems").addEventListener("click",hideElements);
+	document.getElementById("showElems").addEventListener("click",showElements);
+	document.getElementById("hideList").addEventListener("mouseover",mouseOver);
+	document.getElementById("hideList").addEventListener("mouseout",mouseOut);
+
+	function welcome(){
+		alert("welcome to my blog");
+	}
+
+	function convertTemp() {
+		var ftempVar=document.getElementById("ftemp");
+		var ctempVar=document.getElementById("ctemp");
+
+		var y=0,i;
+		
+		if(ftempVar.value==""){
+			ctempVar.value="";
+			ftempVar.style.borderColor="grey";
+			return true;
+		}
+		else{
+			if(validateTemp(ftempVar)){
+				ftempVar.style.borderColor="grey";
+				
+				var ans;
+				ans=((parseInt(ftempVar.value))-32)*(5/9);
+				document.getElementById("ctemp").value=parseInt(ans);
+			}
+			else{
+				ftempVar.style.borderColor="red";
+				alert("Enter correct values");
+				return false;
+			}
+		}
+	}
+	function validateTemp(tempVar){
+		if(isNaN(tempVar.value * 1)){
+			return false;
+		}
+		else{ 
+			return true;
+		}
+	}
+	
+	function hideElements(){
+		var ele = document.getElementsByTagName("DIV");
+		for(i=0;i<ele.length;i++){
+			ele[i].style.visibility = "hidden";
+		}
+	}
+
+	function showElements(){
+		var ele = document.getElementsByTagName("DIV");
+		for(i=0;i<ele.length;i++){
+			ele[i].style.visibility = "visible";
+		}
+	}
+
+	function mouseOver(){
+		document.getElementById("myList").style.display="block";
+	}
+	function mouseOut(){
+		document.getElementById("myList").style.display="none";
+	}
+	
+</script>
+
+</body>
+</html>

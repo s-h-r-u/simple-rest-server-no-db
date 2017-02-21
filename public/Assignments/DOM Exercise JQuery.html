@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>checkbox DOM Exercise 2-JQuery</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			font-size: 100%;
+		}
+		div{
+			padding: 20px;
+			border: 1px solid black;
+			width:350px;
+			height: 450px;
+			margin: 50px 0;
+			float: left;
+		}	
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+	<div id="page" style="position: relative; margin-left: 50px;">
+	<ul id="div1">
+	<input class="clickable" type="checkbox" name="apple"><span class="clickable">Apple</span><br/>
+	<input class="clickable" type="checkbox" name="mango"><span class="clickable">Mango</span><br/>
+	<input class="clickable" type="checkbox" name="grapes"><span class="clickable">Grapes</span><br/>
+	<input class="clickable" type="checkbox" name="strawberry"><span class="clickable">Strawberry</span><br/>
+	<input class="clickable" type="checkbox" name="cherry"><span class="clickable">Cherry</span>
+	</ul>
+	<input type="text" id="new"><button class="clickable" id="add" style="width: 55px; height: 25px;">ADD</button>
+	</div>
+	<div id="div2">
+	</div>
+	<script>
+		$(document).ready(function(){
+			 $("#page").on("click", ".clickable",(function(){
+				if($(this).prop("tagName")=="SPAN"){
+					if($(this).prev().is(":checked")){
+						$(this).prev().prop("checked",false);
+					}
+					else{
+						$(this).prev().prop("checked",true);
+					}
+					removeAppend.call($(this).prev());
+				}
+				if($(this).prop("type")=="checkbox"){
+					removeAppend.call($(this));
+				}
+				if($(this).prop("tagName")=="BUTTON"){
+					$("#div1").append($('<br><input type="checkbox" class="clickable"</input><span class="clickable"></span>').text($("#new").val()));
+					$("#new").val("");
+				}
+			}));
+		});
+		function removeAppend(){
+			var origin=$(this).next().text();
+			if($(this).is(":checked")){
+				$("#div2").append($("<p></p>").text(origin));
+			}
+			else{
+				$("#div2 p").each(function(){
+					if(origin==$(this).text()){
+						$(this).remove();
+					}
+				});
+			}
+		}
+	</script>
+</body>
+</html>

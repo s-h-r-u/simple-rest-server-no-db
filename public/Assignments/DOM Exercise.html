@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>checkbox DOM Exercise 2-Copy</title>
+	<style>
+		body{
+			font-family: "Times New Roman", Georgia, Serif;
+			font-weight: normal; 
+			font-size: 100%;
+		}
+		div{
+			padding: 20px;
+			border: 1px solid black;
+			width:350px;
+			height: 450px;
+			margin: 50px 0;
+			float: left;
+		}	
+	</style>
+</head>
+<body>
+	<div style="position: relative; margin-left: 50px;" onclick="checkElement(event);">
+	<ul id="div1">
+	<input type="checkbox" name="apple"><span>Apple</span><br/>
+	<input type="checkbox" name="mango"><span>Mango</span><br/>
+	<input type="checkbox" name="grapes"><span>Grapes</span><br/>
+	<input type="checkbox" name="strawberry"><span>Strawberry</span><br/>
+	<input type="checkbox" name="cherry"><span>Cherry</span><br/>
+	</ul>
+	<input type="text" id="new"><button id="add" style="width: 55px; height: 25px;">ADD</button>
+	</div>
+	<div id="div2">
+	</div>
+
+	<script>
+		function checkElement(e){
+			var src=e.target;
+			if(src.tagName=="SPAN"){
+				if(src.previousSibling.checked==true){
+					src.previousSibling.checked=false;
+				}
+				else{
+					src.previousSibling.checked=true;
+				}
+				removeAppend.call(src.previousSibling);
+			}
+			if(src.type=="checkbox"){
+				removeAppend.call(src);
+			}
+			if(src.tagName=="BUTTON"){
+				addToList();
+			}
+		}
+		function removeAppend(){
+			var ele=document.getElementById("div2");
+			var child=ele.getElementsByTagName("p");
+			if(this.checked==true){
+				para = document.createElement("p");
+				para.setAttribute("type","checkbox");
+				var node = document.createTextNode(this.nextSibling.innerHTML);
+				para.appendChild(node);
+				ele.appendChild(para);	
+			}
+			else{	
+				for(i=0;i<child.length;i++){
+	  				if(child[i].innerHTML==this.nextSibling.innerHTML){	
+	  					ele.removeChild(child[i]);
+	  				}
+	  			}
+			}
+		}
+		function addToList(){
+			var cBox=document.createElement("input");
+			cBox.setAttribute("type","checkbox");
+			var sp=document.createElement("span");	
+			var	node = document.createTextNode(document.getElementById("new").value);
+			sp.appendChild(node);
+			document.getElementById("div1").appendChild(cBox);
+			document.getElementById("div1").appendChild(sp);	
+			var br=document.createElement("br");
+			document.getElementById("div1").appendChild(br);
+			document.getElementById("new").value="";
+		}
+	</script>
+</body>
+</html>
