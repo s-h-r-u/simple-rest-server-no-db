@@ -2,12 +2,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Bootstrap Project</title>
+	<title>HandlebarsJS Project</title>
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script src="handlebars-v4.0.5.js"></script>
 </head>
 <body>
 
@@ -53,24 +54,26 @@
 		</div>
 		</form>
 		<div id="display" class="container col-sm-12">
-	<!--	<div class="panel panel-default">
-			<div class="panel-heading">	
-				<div class="row">	
-					<div class="col-sm-8">
-						<h2>Soccerball</h2>
-						<p>FIFA approved size and weight</p>
-					</div>
-					<div class="col-sm-4" style="padding-top: 20px;">
-						<div class="col-sm-6"><button type="button" class="btn btn-primary">$19.95</button></div>
-						<div class="col-sm-6"><span class="glyphicon glyphicon-remove-sign" ></span></div>
+			<script id="template" type="text/x-handlebars-template">
+				<div class="panel panel-default newlyAdded">
+				<div class="panel-heading">	
+					<div class="row">	
+						<div class="col-sm-8">
+							<h2>{{ItemName}}</h2>
+							<p>{{ItemDescription}}</p>
+						</div>
+						<div class="col-sm-4" style="padding-top: 20px;">
+							<div class="col-sm-6"><button type="button" class="btn btn-primary">{{price ItemPrice}}</button></div>
+							<div class="col-sm-6"><span id="{{ItemId}}" class="glyphicon glyphicon-remove-sign"></span></div>
+						</div>
 					</div>
 				</div>
 				</div>
-			</div>-->
+			</script>
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript text/x-handlebars-template">
 $("#submit").on("click",function(e){e.preventDefault();});
 $(document).ready(function(){
 	var counter;	
@@ -98,16 +101,20 @@ $(document).ready(function(){
 				}
 			});	
 		}
-		
 	});
 });
 function showItems(id,i,d,p){
-	$("#display").append($(
-		"<div class='panel panel-default'><div class='panel-heading'><div class='row'><div class='col-sm-8'><h2>"
-		+ i +"</h2><p>"
-		+ d +"</p></div><div class='col-sm-4' style='padding-top: 20px;'><div class='col-sm-6'><button type='button' class='btn btn-primary'> $ " 
-		+ p +"</button></div><div class='col-sm-6'><span id='" +id+ "'class='glyphicon glyphicon-remove-sign'></span></div></div></div></div></div>"
-	));
+	var data={
+		ItemId:id,
+		ItemName:i,
+		ItemDescription:d,
+		ItemPrice:p
+	};
+	var template=Handlebars.compile($("#template").html());
+	Handlebars.registerHelper('price',function(ItemPrice){
+		return "$ "+ItemPrice;
+	});
+	$("#display").append(template(data));
 }
 $("#display").delegate(".glyphicon","click",function (){
 	var parentEle=$(this).parentsUntil("#display");
