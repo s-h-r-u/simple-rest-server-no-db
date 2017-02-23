@@ -55,32 +55,33 @@
 		</form>
 		<div id="display" class="container col-sm-12">
 			<script id="template" type="text/x-handlebars-template">
+				{{#each this}}
 				<div class="panel panel-default newlyAdded">
 				<div class="panel-heading">	
 					<div class="row">	
 						<div class="col-sm-8">
-							<h2>{{ItemName}}</h2>
-							<p>{{ItemDescription}}</p>
+							<h2>{{this.item}}</h2>
+							<p>{{this.desc}}</p>
 						</div>
 						<div class="col-sm-4" style="padding-top: 20px;">
-							<div class="col-sm-6"><button type="button" class="btn btn-primary">{{price ItemPrice}}</button></div>
-							<div class="col-sm-6"><span id="{{ItemId}}" class="glyphicon glyphicon-remove-sign"></span></div>
+							<div class="col-sm-6"><button type="button" class="btn btn-primary">$ {{this.price}}</button></div>
+							<div class="col-sm-6"><span id="{{this.id}}" class="glyphicon glyphicon-remove-sign"></span></div>
 						</div>
 					</div>
 				</div>
 				</div>
+				{{/each}}
 			</script>
 		</div>
 	</div>
 </div>
 <script type="text/javascript text/x-handlebars-template">
 $("#submit").on("click",function(e){e.preventDefault();});
-$(document).ready(function(){
-	var counter;	
+$(document).ready(function(){	
+	var compiledTemplate=Handlebars.compile($("#template").html());
 	$.getJSON("/products", function(data){
-		$.each(data,function(i,field){
-			showItems(field['id'],field['item'],field['desc'],field['price']);
-		});
+		var compiledData=compiledTemplate(data);
+		$("#display").append(compiledData);
 	});	
 	$("#submit").click(function(){	
 		if($("#item").val()=="" || $("#desc").val()=="" || $("#price").val()==""){
@@ -97,27 +98,15 @@ $(document).ready(function(){
 					price:$("#price").val()
 				},
 				success: function(data){	
-					showItems(data['id'],data['item'],data['desc'],data['price']);
+					var compiledData=compiledTemplate([data]);
+					$("#display").append(compiledData);
 				}
 			});	
 		}
 	});
 });
-function showItems(id,i,d,p){
-	var data={
-		ItemId:id,
-		ItemName:i,
-		ItemDescription:d,
-		ItemPrice:p
-	};
-	var template=Handlebars.compile($("#template").html());
-	Handlebars.registerHelper('price',function(ItemPrice){
-		return "$ "+ItemPrice;
-	});
-	$("#display").append(template(data));
-}
 $("#display").delegate(".glyphicon","click",function (){
-	var parentEle=$(this).parentsUntil("#display");
+	var parentEle=$(this).closest(".panel");
 	var id=$(this).attr('id');
 	console.log("id: "+id);
 	$.ajax({

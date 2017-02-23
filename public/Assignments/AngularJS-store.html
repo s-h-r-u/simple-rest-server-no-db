@@ -110,7 +110,7 @@ function showItems(id,i,d,p){
 	));
 }
 $("#display").delegate(".glyphicon","click",function (){
-	var parentEle=$(this).parentsUntil("#display");
+	var parentEle=$(this).closest(".panel");
 	var id=$(this).attr('id');
 	console.log("id: "+id);
 	$.ajax({
