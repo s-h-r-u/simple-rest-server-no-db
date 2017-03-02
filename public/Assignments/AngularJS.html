@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HandlebarsJS Project</title>
+	<meta charset="utf-8">
+ 	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script src="handlebars-v4.0.5.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#storeNav">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>		
+			</button>
+			<a class="navbar-brand" href="#store">Store</a>
+		</div>
+		<div class="collapse navbar-collapse" id="storeNav">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#home">Home</a></li>
+				<li><a href="#about">About</a></li>
+				<li><a href="#catalog">Catalog</a></li>
+				<li><a href="#contact">Contact</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<div class="container-fluid"  data-ng-app="myApp" data-ng-controller="myController">
+	<div class="container list-group col-sm-3">
+		<a href="#CrasJustoOdio" class="list-group-item active">Cras justo odio</a>
+		<a href="#DapibusAcFacilisisIn" class="list-group-item">Dapibus ac facilisis in</a>
+		<a href="#MorbiLeoRisus" class="list-group-item">Morbi leo risus</a>
+		<a href="#PortaAcConsecteturAc" class="list-group-item">Porta ac consectetur ac</a>
+		<a href="#VestibulumAtEros" class="list-group-item">Vestibulum at eros</a>
+	</div>
+	<div class="container col-sm-9">
+		<form class="form-group" name="myForm">	
+		<div class="form-inline" style="padding-bottom: 20px;">
+			<b>Search</b>
+			<input type="text" name="search" placeholder="Search by item name" class="form-control" data-ng-model="search.item">
+		</div>
+		<div class="form-inline">
+			<b>Add Item </b><input id="item" type="text" name="item" placeholder="Item Name" class="form-control" data-ng-model="itemName">
+			<input id="desc" type="text" name="desc" placeholder="Description" class="form-control" data-ng-model="itemDesc">
+			<input id="price" type="text" name="price" placeholder="Price" class="form-control" data-ng-model="itemPrice">
+			<button id="submit" type="submit" class="btn btn-default" data-ng-click="addItem()">Add</button>
+		</div>
+		</form>
+		<div id="display" class="container col-sm-12">
+			<p>{{errorLoading}}</p>
+			<div class="panel panel-default" data-ng-repeat="items in productData | filter:search:strict">
+				<div class="panel-heading">	
+					<div class="row">	
+						<div class="col-sm-8">
+							<h2 data-ng-model="items.item">{{items.item}}</h2>
+							<p data-ng-model="items.desc">{{items.desc}}</p>
+						</div>
+						<div class="col-sm-4" style="padding-top: 20px;">
+							<div class="col-sm-6"><button type="button" class="btn btn-primary" data-ng-model="items.price">{{items.price | currency}}</button></div>
+							<div class="col-sm-6"><span id="{{items.id}}" data-ng-model="items.id" class="glyphicon glyphicon-remove-sign" data-ng-click="deleteItem($index,items.id)"></span></div>
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>
+<script>
+var app=angular.module('myApp',[]);
+app.controller('myController',function($scope,$http){
+	$http.get("/products")
+	.then(function(response){
+			$scope.productData=response.data;
+		},
+		function(response){
+			$scope.errorLoading=response.statusText;
+			console.log("error loading data");
+		}
+	);
+	$scope.addItem=function(){
+		$http({
+			method: "post",
+			url: "/products",
+			data: {
+				item: $scope.itemName,
+				desc: $scope.itemDesc,
+				price: $scope.itemPrice
+			}
+		})
+		.then(function(response){
+				$scope.productData.push(response.data);
+			},
+			function(response){
+				$scope.errorLoading=response.statusText;
+				console.log("data adding error");
+			}
+		);
+	}
+	$scope.deleteItem=function(index,id){
+		$http({
+			method: "delete",
+			url: "/products/"+id
+		})
+		.then(function(response){
+				console.log("item deleted: "+response.data);
+				$scope.productData.splice(index,1);
+				console.log("index: "+index);
+				console.log("id: "+id);
+			},
+			function(response){
+				console.log("data deleting error: "+response.statusText);
+				console.log("index: "+index);
+				console.log("id: "+id);
+			}
+		);
+	}
+});
+</script>
+</body>
+</html>
