@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>AngularJS Project</title>
+	<title>AngularJS Project-service</title>
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -75,53 +75,54 @@
 </div>
 <script>
 var app=angular.module('myApp',[]);
-app.controller('myController',function($scope,$http){
-	$http.get("/products")
-	.then(function(response){
-			$scope.productData=response.data;
-			console.log(response.data);
-		},
-		function(response){
-			$scope.errorLoading=response.statusText;
-			console.log("error loading data");
-		}
-	);
+app.service('Products',function($http){
+	this.getProducts=function(){
+		return $http.get("/products");
+	}
+	this.addProducts=function(productDetails){
+		return $http.post("/Products",productDetails);
+	}
+	this.deleteProducts=function(id){
+		return $http.delete("/products/"+id);
+	}
+});
+app.controller('myController',function($scope,Products){
+	Products.getProducts()
+	.success(function(response){
+		$scope.productData=response;
+	})
+	.error(function(response){
+		$scope.errorLoading=response.statusText;
+		console.log("data adding error");
+	});
 	$scope.addItem=function(){
-		$http({
-			method: "post",
-			url: "/products",
-			data: {
-				item: $scope.itemName,
-				desc: $scope.itemDesc,
-				price: $scope.itemPrice
-			}
+		var productDetails={
+			item: $scope.itemName,
+			desc: $scope.itemDesc,
+			price: $scope.itemPrice
+		};
+		Products.addProducts(productDetails)
+		.success(function(response){
+			$scope.productData.push(response);
 		})
-		.then(function(response){
-				$scope.productData.push(response.data);
-			},
-			function(response){
-				$scope.errorLoading=response.statusText;
-				console.log("data adding error");
-			}
-		);
+		.error(function(response){
+			$scope.errorLoading=response.statusText;
+			console.log("data adding error");
+		});
 	}
 	$scope.deleteItem=function(){
 		var id=$(this)[0].items.id;
 		var index=$(this)[0].$index;
 		console.log("id: "+id);
 		console.log("index: "+index);
-		$http({
-			method: "delete",
-			url: "/products/"+id
+		Products.deleteProducts(id)
+		.success(function(response){
+			console.log("item deleted: "+response);
+			$scope.productData.splice(index,1);
 		})
-		.then(function(response){
-				console.log("item deleted: "+response.data);
-				$scope.productData.splice(index,1);
-			},
-			function(response){
-				console.log("data deleting error: "+response.statusText);
-			}
-		);
+		.error(function(response){
+			console.log("data deleting error: "+response.statusText);
+		});
 	}
 });
 </script>

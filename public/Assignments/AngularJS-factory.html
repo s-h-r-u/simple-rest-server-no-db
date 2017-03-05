@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>AngularJS Project</title>
+	<title>AngularJS Project-factory</title>
 	<meta charset="utf-8">
  	<meta name="viewport" content="width=device-width, initial-scale=1">
   	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -10,6 +10,7 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   	<script src="handlebars-v4.0.5.js"></script>
   	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
 </head>
 <body>
 
@@ -33,8 +34,13 @@
 		</div>
 	</div>
 </nav>
-<div class="container-fluid"  data-ng-app="myApp" data-ng-controller="myController">
-	<div class="container list-group col-sm-3">
+<div class="container-fluid" data-ng-app="myApp" data-ng-controller="myController">
+	<div class="container col-sm-12">
+		<div data-ng-view="">
+
+		</div>
+	</div>
+	<div class="container list-group col-sm-3" style="float: left; clear: left;">
 		<a href="#CrasJustoOdio" class="list-group-item active">Cras justo odio</a>
 		<a href="#DapibusAcFacilisisIn" class="list-group-item">Dapibus ac facilisis in</a>
 		<a href="#MorbiLeoRisus" class="list-group-item">Morbi leo risus</a>
@@ -74,54 +80,75 @@
 	</div>
 </div>
 <script>
-var app=angular.module('myApp',[]);
-app.controller('myController',function($scope,$http){
-	$http.get("/products")
-	.then(function(response){
-			$scope.productData=response.data;
-			console.log(response.data);
-		},
-		function(response){
-			$scope.errorLoading=response.statusText;
-			console.log("error loading data");
-		}
-	);
+var app=angular.module('myApp',['ngRoute']);
+app.config(function($routeProvider){
+	$routeProvider
+	.when('/home',{
+		templateUrl:"home.html"
+	})
+	.when('/about',{
+		templateUrl:"about.html"
+	})
+	.when('/catalog',{
+		templateUrl:"catalog.html"
+	})
+	.when('/contact',{
+		templateUrl:"contact.html"
+	})
+	.otherwise({
+		templateUrl:"home.html"
+	});
+});
+app.factory('Products',function($http){
+	var prodFactory={};
+	prodFactory.getProducts=function(){
+		return $http.get("/products");
+	}
+	prodFactory.addProducts=function(productDetails){
+		return $http.post("/Products",productDetails);
+	}
+	prodFactory.deleteProducts=function(id){
+		return $http.delete("/products/"+id);
+	}
+	return prodFactory;
+});
+app.controller('myController',function($scope,Products){
+	Products.getProducts()
+	.success(function(response){
+		$scope.productData=response;
+	})
+	.error(function(response){
+		$scope.errorLoading=response.statusText;
+		console.log("data adding error");
+	});
 	$scope.addItem=function(){
-		$http({
-			method: "post",
-			url: "/products",
-			data: {
-				item: $scope.itemName,
-				desc: $scope.itemDesc,
-				price: $scope.itemPrice
-			}
+		var productDetails={
+			item: $scope.itemName,
+			desc: $scope.itemDesc,
+			price: $scope.itemPrice
+		};
+		Products.addProducts(productDetails)
+		.success(function(response){
+			$scope.productData.push(response);
 		})
-		.then(function(response){
-				$scope.productData.push(response.data);
-			},
-			function(response){
-				$scope.errorLoading=response.statusText;
-				console.log("data adding error");
-			}
-		);
+		.error(function(response){
+			$scope.errorLoading=response.statusText;
+			console.log("data adding error");
+		});
 	}
 	$scope.deleteItem=function(){
 		var id=$(this)[0].items.id;
 		var index=$(this)[0].$index;
 		console.log("id: "+id);
 		console.log("index: "+index);
-		$http({
-			method: "delete",
-			url: "/products/"+id
+		Products.deleteProducts(id)
+		.success(function(response){
+			console.log("item deleted: "+response);
+			$scope.productData.splice(index,1);
 		})
-		.then(function(response){
-				console.log("item deleted: "+response.data);
-				$scope.productData.splice(index,1);
-			},
-			function(response){
-				console.log("data deleting error: "+response.statusText);
-			}
-		);
+		.error(function(response){
+			console.log("data deleting error: "+response.statusText);
+		});
 	}
 });
 </script>
